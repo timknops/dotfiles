@@ -1,6 +1,6 @@
-require 'lua.remaps'
-require 'lua.options'
-require 'lua.lazy_init'
+require 'user.remaps'
+require 'user.options'
+require 'user.lazy_init'
 
 -- Shows highlighting on yanking
 vim.api.nvim_create_autocmd('TextYankPost', {
