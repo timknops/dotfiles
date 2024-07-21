@@ -25,10 +25,11 @@ return {
     end,
     formatters_by_ft = {
       lua = { 'stylua' },
-      javascript = { { 'biome', 'prettierd', 'prettier' } },
-      typescript = { { 'biome', 'prettierd', 'prettier' } },
-      typescriptreact = { { 'biome', 'prettierd', 'prettier' } },
-      svelte = { { 'prettierd', 'prettier ' } },
+      javascript = { 'biome', 'prettierd', 'prettier' },
+      typescript = { 'biome', 'prettierd', 'prettier' },
+      typescriptreact = { 'biome', 'prettierd', 'prettier' },
+      svelte = { 'prettierd', 'prettier' },
+      go = { 'gofmt', 'gofumpt' },
     },
   },
 }
