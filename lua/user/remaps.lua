@@ -28,7 +28,5 @@ vim.keymap.set('n', 'N', 'Nzz', { desc = 'Move to previous search result and kee
 -- NOTE: Caps Lock is set to Ctrl for better ergonomics
 vim.keymap.set('i', '<C-c>', '<nop>')
 
--- Keybinds for saving and quitting
-vim.keymap.set('n', '<leader>w', '<cmd>w<cr>')
-vim.keymap.set('n', '<leader>q', '<cmd>q<cr>')
-vim.keymap.set('n', '<leader>z', '<cmd>wq<cr>')
+-- Paste without yanking
+vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yanking' })
