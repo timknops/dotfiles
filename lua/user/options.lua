@@ -12,7 +12,9 @@ vim.opt.relativenumber = true
 
 vim.opt.mouse = 'a'
 
+vim.opt.expandtab = true
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 
 -- Don't show the mode, since it's already in the status line
