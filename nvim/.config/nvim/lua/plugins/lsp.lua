@@ -1,6 +1,6 @@
 return {
   'neovim/nvim-lspconfig',
-  dependencies = {
+
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
@@ -111,8 +111,8 @@ return {
     --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
     --  - settings (table): Override the default settings passed when initializing the server.
     --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+  -- tsserver = {},
     local servers = {
-      tsserver = {},
       html = {},
       cssls = {},
       svelte = {},
@@ -159,3 +159,4 @@ return {
     }
   end,
 }
+

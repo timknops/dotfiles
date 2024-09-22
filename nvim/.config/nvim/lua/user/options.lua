@@ -1,7 +1,3 @@
--- Set shell so that commands work in windows
-vim.opt.shell = '"C:\\Program Files\\Git\\bin\\bash.exe"'
-vim.opt.shellcmdflag = '-c'
-
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
