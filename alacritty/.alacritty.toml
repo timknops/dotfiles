@@ -13,7 +13,7 @@ dynamic_padding = true
 size = 12.0
 
 [font.normal]
-family = "JetBrainsMono NF"
+family = "JetBrainsMono Nerd Font"
 style = "Regular"
 
 [font.bold]
