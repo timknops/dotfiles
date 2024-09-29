@@ -191,10 +191,6 @@ bindsym $mod+r mode "resize"
 #         status_command i3status
 # }
 
-# Picom
-exec_always --no-startup-id killall -q picom
-exec_always --no-startup-id sleep 0.1; picom 
-
 # Remap
 exec --no-startup-id ~/i3_startup.sh
 
@@ -205,7 +201,15 @@ exec --no-startup-id redshift
 exec_always --no-startup-id killall -q polybar
 exec_always --no-startup-id sleep 0.1; polybar
 
-exec_always feh --bg-scale ~/.config/wallpapers/pastel-window.png
+# Picom
+exec_always --no-startup-id killall -q picom
+exec_always --no-startup-id sleep 0.1; picom
+
+# Dunst
+exec_always --no-startup-id killall -q dunst
+exec_always --no-startup-id sleep 0.1; dunst
+
+# exec_always feh --bg-scale ~/.config/wallpapers/a_group_of_tall_buildings_with_cartoon_characters_on_them.jpg
 
 # Remove the i3wm title bar
 for_window [class="^.*"] border pixel 2
