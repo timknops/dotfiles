@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wallpapersDir="$HOME/.config/wallpapers"
+wallpapersDir="$HOME/.config/wallpapers/bg-cycle-wps"
 
 if [ ! -d "$wallpapersDir" ]; then
     echo "Wallpapers directory does not exist"

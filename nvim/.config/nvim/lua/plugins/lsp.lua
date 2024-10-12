@@ -1,13 +1,12 @@
 return {
   'neovim/nvim-lspconfig',
 
-    { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
-    'williamboman/mason-lspconfig.nvim',
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
+  { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
+  'williamboman/mason-lspconfig.nvim',
+  'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-    { 'j-hui/fidget.nvim', opts = {} },
-    { 'folke/neodev.nvim', opts = {} },
-  },
+  { 'j-hui/fidget.nvim', opts = {} },
+  { 'folke/neodev.nvim', opts = {} },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
@@ -111,7 +110,7 @@ return {
     --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
     --  - settings (table): Override the default settings passed when initializing the server.
     --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-  -- tsserver = {},
+    -- tsserver = {},
     local servers = {
       html = {},
       cssls = {},
@@ -159,4 +158,3 @@ return {
     }
   end,
 }
-
