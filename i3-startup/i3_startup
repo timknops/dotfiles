@@ -20,6 +20,5 @@ if [ $time_until_shutdown -gt 300 ]; then
 fi
 
 if [ $(date +%H) -eq 20 ]; then
-    notify-send "It's time" "Read" -u critical
+    i3lock -i $HOME/.config/wallpapers/lockscreen/lockscreen.png
 fi
-
