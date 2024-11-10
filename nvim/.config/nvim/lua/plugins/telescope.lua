@@ -30,8 +30,9 @@ return {
       defaults = {
         mappings = {
           i = {
-            -- Close telescope when <esc> is pressed
             ['<esc>'] = require('telescope.actions').close,
+            ['<C-j>'] = require('telescope.actions').move_selection_next,
+            ['<C-k>'] = require('telescope.actions').move_selection_previous,
           },
         },
       },

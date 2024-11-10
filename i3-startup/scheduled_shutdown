@@ -1,0 +1,26 @@
+#!/bin/bash
+
+schedule_shutdown() {
+    local delay_minutes=5
+    local delay_seconds=$((delay_minutes * 60))
+
+    echo $(date +%H)
+    if [ $(date +%H) -eq 23 ]; then
+        delay_minutes=0
+        delay_seconds=0
+    fi
+
+    shutdown -h +$delay_minutes --no-wall
+
+    (
+        sleep $((delay_seconds - 30))
+        notify-send "System Shutdown" "System will shut down in 30 seconds."
+    ) &
+}
+
+journalctl -f -n 0 | while read line; do
+    if echo "$line" | grep -q "System shutdown has been cancelled"; then
+        notify-send "Shutdown Cancelled" "System shutdown has been cancelled."
+        schedule_shutdown
+    fi
+done

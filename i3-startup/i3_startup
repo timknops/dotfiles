@@ -1,16 +1,17 @@
 #!/bin/bash
-# Add a small delay to ensure X is fully ready
+
 sleep 2
 setxkbmap -option ctrl:nocaps
 xcape -e 'Control_L=Escape'
 xrandr --output DP-3 --mode 1920x1080 --rate 144.00
-.config/wallpaper_cycle &
 
+.config/wallpaper_cycle &
 dunst &
 
-shutdown -h 22:45 --no-wall
+shutdown -h 22:30 --no-wall
+./scheduled_shutdown &
 
-shutdown_time=$(date -d "22:45" +%s)
+shutdown_time=$(date -d "22:30" +%s)
 current_time=$(date +%s)
 time_until_shutdown=$((shutdown_time - current_time))
 
@@ -19,6 +20,3 @@ if [ $time_until_shutdown -gt 300 ]; then
     notify-send "System Shutdown" "System will shut down in 5 minutes."
 fi
 
-if [ $(date +%H) -eq 20 ]; then
-    i3lock -i $HOME/.config/wallpapers/lockscreen/lockscreen.png
-fi

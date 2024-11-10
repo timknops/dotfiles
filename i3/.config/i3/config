@@ -221,7 +221,7 @@ set $bg #27272a
 set $fg #fafafa
 
 # active border color
-set $color1 #52525b
+set $color1 #a1a1aa
 
 # class                 border    backgr   text  indicator
 client.focused          $fg     $bg     $fg  $color1    $color1
