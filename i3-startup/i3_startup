@@ -9,7 +9,7 @@ xrandr --output DP-3 --mode 1920x1080 --rate 144.00
 dunst &
 
 shutdown -h 22:30 --no-wall
-./scheduled_shutdown &
+~/scheduled_shutdown &
 
 shutdown_time=$(date -d "22:30" +%s)
 current_time=$(date +%s)

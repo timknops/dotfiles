@@ -1,0 +1,174 @@
+{
+  "liveServer.settings.donotShowInfoMsg": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "workbench.iconTheme": "material-icon-theme",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false,
+    "go": false
+  },
+  "tailwindCSS.experimental.configFile": null,
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "javascript"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "emmet.showSuggestionsAsSnippets": true,
+  "tailwindCSS.emmetCompletions": true,
+  "emmet.showAbbreviationSuggestions": true,
+  "emmet.showExpandedAbbreviation": "always",
+  "emmet.includeLanguages": {
+    "vue-html": "html",
+    "vue": "html"
+  },
+  "notebook.formatOnSave.enabled": true,
+  "workbench.settings.applyToAllProfiles": ["notebook.formatOnSave.enabled"],
+  "files.autoSave": "afterDelay",
+  "go.toolsManagement.autoUpdate": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.accessibilitySupport": "off",
+  "editor.tabSize": 4,
+  "editor.lineNumbers": "relative",
+  "editor.mouseWheelZoom": true,
+  "editor.cursorSurroundingLines": 10,
+  // "editor.renderWhitespace": "all",
+  "editor.renderLineHighlight": "all",
+  "editor.minimap.enabled": false,
+  "editor.inlineSuggest.enabled": true,
+
+  "vim.leader": "<space>",
+  "vim.hlsearch": true,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.handleKeys": {
+    "<C-c>": false,
+    "q": false
+  },
+  "vim.normalModeKeyBindingsNonRecursive": [
+    { "before": ["<Esc>"], "commands": [":nohl"] },
+    { "before": ["<C-p>"], "commands": [":bprevious"] },
+    { "before": ["<C-n>"], "commands": [":bnext"] },
+
+    { "before": ["leader", "v"], "commands": [":vsplit"] },
+
+    {
+      "before": ["<C-d>"],
+      "after": ["<C-d>", "z", "z"]
+    },
+
+    {
+      "before": ["<C-u>"],
+      "after": ["<C-u>", "z", "z"]
+    },
+
+    {
+      "before": ["n"],
+      "after": ["n", "z", "z"]
+    },
+
+    {
+      "before": ["N"],
+      "after": ["N", "z", "z"]
+    },
+
+    {
+      "before": ["<C-h>"],
+      "commands": ["workbench.action.focusLeftGroup"]
+    },
+    {
+      "before": ["<C-l>"],
+      "commands": ["workbench.action.focusRightGroup"]
+    },
+
+    {
+      "before": ["<S-k>"],
+      "commands": ["editor.action.showHover"]
+    },
+    {
+      "before": ["<S-j>"],
+      "commands": ["editor.action.showDefinitionPreviewHover"]
+    },
+
+    { "before": ["leader", "w"], "commands": [":w!"] },
+    { "before": ["leader", "q"], "commands": [":q!"] },
+    { "before": ["leader", "x"], "commands": [":x!"] },
+    {
+      "before": ["[", "d"],
+      "commands": ["editor.action.marker.prev"]
+    },
+    {
+      "before": ["]", "d"],
+      "commands": ["editor.action.marker.next"]
+    },
+    {
+      "before": ["<leader>", "c", "a"],
+      "commands": ["editor.action.quickFix"]
+    },
+    {
+      "before": ["leader", "s", "e"],
+      "commands": ["workbench.action.showCommands"]
+    },
+    {
+      "before": ["leader", "s", "f"],
+      "commands": ["find-it-faster.findFiles"]
+    },
+    {
+      "before": ["leader", "s", "g"],
+      "commands": ["find-it-faster.findWithinFiles"]
+    },
+    {
+      "before": ["leader", "s", "s"],
+      "commands": ["workbench.action.gotoSymbol"]
+    },
+
+    { "before": ["leader", "p"], "commands": ["editor.action.formatDocument"] },
+    {
+      "before": ["g", "h"],
+      "commands": ["editor.action.showDefinitionPreviewHover"]
+    }
+  ],
+  "vim.visualModeKeyBindings": [
+    { "before": ["<"], "commands": ["editor.action.outdentLines"] },
+    { "before": [">"], "commands": ["editor.action.indentLines"] },
+
+    { "before": ["K"], "commands": ["editor.action.moveLinesUpAction"] },
+    { "before": ["J"], "commands": ["editor.action.moveLinesDownAction"] }
+  ],
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["<C-l>"],
+      "commands": [
+        "acceptSelectedSuggestion",
+        "editor.action.inlineSuggest.commit"
+      ]
+    }
+  ],
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "breadcrumbs.enabled": false,
+  "notebook.lineNumbers": "on",
+  "github.copilot.editor.enableAutoCompletions": true,
+  "interactiveWindow.executeWithShiftEnter": true,
+  "svelte.enable-ts-plugin": true,
+  "workbench.colorTheme": "One Dark Pro",
+  "find-it-faster.general.showMaximizedTerminal": true
+}

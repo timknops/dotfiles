@@ -74,7 +74,7 @@ nmap <S-k> <Action>(ShowErrorDescription)
 nmap <S-j> <Action>(QuickJavaDoc)
 
 "For centering the screen after moving up and down
-tnoremap <Esc><Esc> <C-\><C-n>
+nnoremap <Esc><Esc> <C-\><C-n>
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 nnoremap n nzz
