@@ -1,5 +1,4 @@
 {
-  "liveServer.settings.donotShowInfoMsg": true,
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -11,37 +10,33 @@
     "editor.tabSize": 2,
     "editor.formatOnSave": true
   },
+  "javascript.updateImportsOnFileMove.enabled": "always",
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
   },
-  "workbench.iconTheme": "material-icon-theme",
-  "github.copilot.enable": {
-    "*": true,
-    "plaintext": false,
-    "markdown": true,
-    "scminput": false,
-    "go": false
+  "svelte.enable-ts-plugin": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
   },
-  "tailwindCSS.experimental.configFile": null,
-  "tailwindCSS.includeLanguages": {
-    "plaintext": "javascript"
-  },
-  "javascript.updateImportsOnFileMove.enabled": "always",
+  "go.toolsManagement.autoUpdate": true,
+
   "emmet.showSuggestionsAsSnippets": true,
-  "tailwindCSS.emmetCompletions": true,
   "emmet.showAbbreviationSuggestions": true,
   "emmet.showExpandedAbbreviation": "always",
   "emmet.includeLanguages": {
     "vue-html": "html",
     "vue": "html"
   },
+
   "notebook.formatOnSave.enabled": true,
-  "workbench.settings.applyToAllProfiles": ["notebook.formatOnSave.enabled"],
-  "files.autoSave": "afterDelay",
-  "go.toolsManagement.autoUpdate": true,
-  "[go]": {
-    "editor.defaultFormatter": "golang.go"
+  "notebook.lineNumbers": "on",
+
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": null,
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "javascript"
   },
+
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
@@ -50,15 +45,16 @@
   "editor.lineNumbers": "relative",
   "editor.mouseWheelZoom": true,
   "editor.cursorSurroundingLines": 10,
-  // "editor.renderWhitespace": "all",
   "editor.renderLineHighlight": "all",
   "editor.minimap.enabled": false,
   "editor.inlineSuggest.enabled": true,
+  "editor.fontFamily": "'JetBrainsMono Nerd Font', 'Droid Sans Mono', 'monospace', monospace",
 
   "vim.leader": "<space>",
   "vim.hlsearch": true,
   "vim.incsearch": true,
   "vim.useSystemClipboard": true,
+  "vim.highlightedyank.enable": true,
   "vim.handleKeys": {
     "<C-c>": false,
     "q": false
@@ -125,7 +121,7 @@
     },
     {
       "before": ["leader", "s", "e"],
-      "commands": ["workbench.action.showCommands"]
+      "commands": ["workbench.action.quickOpen"]
     },
     {
       "before": ["leader", "s", "f"],
@@ -138,6 +134,10 @@
     {
       "before": ["leader", "s", "s"],
       "commands": ["workbench.action.gotoSymbol"]
+    },
+    {
+      "before": ["leader", "s", "p"],
+      "commands": ["projectManager.listGitProjects#sideBarGit"]
     },
 
     { "before": ["leader", "p"], "commands": ["editor.action.formatDocument"] },
@@ -162,13 +162,30 @@
       ]
     }
   ],
+
+  "workbench.colorTheme": "One Dark Pro",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.settings.applyToAllProfiles": ["notebook.formatOnSave.enabled"],
+
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "terminal.integrated.defaultProfile.linux": "zsh",
-  "breadcrumbs.enabled": false,
-  "notebook.lineNumbers": "on",
+
   "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false,
+    "go": false
+  },
+
+  "find-it-faster.general.showMaximizedTerminal": true,
+
+  "projectManager.git.baseFolders": ["$home/repos"],
+  "projectManager.sortList": "Recent",
+
+  "breadcrumbs.enabled": false,
   "interactiveWindow.executeWithShiftEnter": true,
-  "svelte.enable-ts-plugin": true,
-  "workbench.colorTheme": "One Dark Pro",
-  "find-it-faster.general.showMaximizedTerminal": true
+  "liveServer.settings.donotShowInfoMsg": true,
+  "files.autoSave": "afterDelay"
 }
