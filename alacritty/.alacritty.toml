@@ -34,7 +34,7 @@ bindings = [
 style.shape = "Beam"
 
 [colors.primary]
-background = "#1e1e2e"
+# background = "#1e1e2e"
 foreground = "#cdd6f4"
 dim_foreground = "#7f849c"
 bright_foreground = "#cdd6f4"

@@ -20,3 +20,9 @@ if [ $time_until_shutdown -gt 300 ]; then
     notify-send "System Shutdown" "System will shut down in 5 minutes."
 fi
 
+# if time is equal to 19:45
+if [ current_time -eq 19:45 ]; then
+    notify-send "YOU KNOW WHAT TIME IT IS" -u critical
+    notify-send "YOU KNOW WHAT TIME IT IS"
+fi
+
