@@ -13,6 +13,9 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 
+-- show tabs
+-- vim.opt.showtabline = 2
+
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 

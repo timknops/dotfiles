@@ -1,12 +1,15 @@
 return {
   'neovim/nvim-lspconfig',
 
-  { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
-  'williamboman/mason-lspconfig.nvim',
-  'WhoIsSethDaniel/mason-tool-installer.nvim',
+  dependencies = {
+    { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
+    'williamboman/mason-lspconfig.nvim',
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-  { 'j-hui/fidget.nvim', opts = {} },
-  { 'folke/neodev.nvim', opts = {} },
+    { 'j-hui/fidget.nvim', opts = {} },
+
+    'hrsh7th/cmp-nvim-lsp',
+  },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
@@ -15,17 +18,12 @@ return {
           vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
-        -- Jump to the definition of the word under your cursor.
-        --  This is where a variable was first declared, or where a function is defined, etc.
-        --  To jump back, press <C-t>.
         map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+        map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+        map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
         -- Find references for the word under your cursor.
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-
-        -- Jump to the implementation of the word under your cursor.
-        -- Useful when your language has ways of declaring types without an actual implementation.
-        map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
         -- Jump to the type of the word under your cursor.
         -- Useful when you're not sure what type a variable is and you want to see
@@ -49,19 +47,11 @@ return {
         -- or a suggestion from your LSP for this to activate.
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-        -- Opens a popup that displays documentation about the word under your cursor
-        --  See `:help K` for why this keymap.
-        map('K', vim.lsp.buf.hover, 'Hover Documentation')
-
         -- WARN: This is not Goto Definition, this is Goto Declaration.
         --  For example, in C this would take you to the header.
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-        -- The following two autocommands are used to highlight references of the
-        -- word under your cursor when your cursor rests there for a little while.
-        --    See `:help CursorHold` for information about when this is executed
-        --
-        -- When you move your cursor, the highlights will be cleared (the second autocommand).
+        -- In short: Config for highlighting references of the word under your cursor
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client.server_capabilities.documentHighlightProvider then
           local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
@@ -114,11 +104,10 @@ return {
     local servers = {
       html = {},
       cssls = {},
-      svelte = {},
       prettierd = {},
       eslint = {},
       tailwindcss = {},
-      gopls = {},
+      pyright = {},
       lua_ls = {
         settings = {
           Lua = {
