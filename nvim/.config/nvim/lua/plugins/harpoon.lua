@@ -7,6 +7,20 @@ return {
   end,
   keys = {
     {
+      '<C-p>',
+      function()
+        require('harpoon'):list():prev()
+      end,
+      desc = 'harpoon previous file in list',
+    },
+    {
+      '<C-n>',
+      function()
+        require('harpoon'):list():next()
+      end,
+      desc = 'harpoon previous file in list',
+    },
+    {
       '<leader>a',
       function()
         require('harpoon'):list():add()

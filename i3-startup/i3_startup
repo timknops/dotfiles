@@ -8,21 +8,15 @@ xrandr --output DP-3 --mode 1920x1080 --rate 144.00
 .config/wallpaper_cycle &
 dunst &
 
-shutdown -h 22:30 --no-wall
+shutdown -h 22:45 --no-wall
 ~/scheduled_shutdown &
 
-shutdown_time=$(date -d "22:30" +%s)
+shutdown_time=$(date -d "22:45" +%s)
 current_time=$(date +%s)
 time_until_shutdown=$((shutdown_time - current_time))
 
 if [ $time_until_shutdown -gt 300 ]; then
     sleep $((time_until_shutdown - 300))
-    notify-send "System Shutdown" "System will shut down in 5 minutes."
-fi
-
-# if time is equal to 19:45
-if [ current_time -eq 19:45 ]; then
-    notify-send "YOU KNOW WHAT TIME IT IS" -u critical
-    notify-send "YOU KNOW WHAT TIME IT IS"
+    notify-send "System Shutdown" "System will shut down in 5 minutes." -u critical
 fi
 

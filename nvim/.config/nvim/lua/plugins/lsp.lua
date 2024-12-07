@@ -107,7 +107,15 @@ return {
       prettierd = {},
       eslint = {},
       tailwindcss = {},
-      pyright = {},
+      pyright = {
+        settings = {
+          python = {
+            analysis = {
+              autoImportCompletions = true,
+            },
+          },
+        },
+      },
       lua_ls = {
         settings = {
           Lua = {

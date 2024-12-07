@@ -1,11 +1,11 @@
 #!/bin/bash
 
 schedule_shutdown() {
-    local delay_minutes=5
+    local delay_minutes=6
     local delay_seconds=$((delay_minutes * 60))
 
     echo $(date +%H)
-    if [ $(date +%H) -eq 23 ]; then
+    if [ $(date +%H) -eq 23 ] && [ $(date +%M) -ge 15 ]; then
         delay_minutes=0
         delay_seconds=0
     fi
@@ -14,7 +14,7 @@ schedule_shutdown() {
 
     (
         sleep $((delay_seconds - 30))
-        notify-send "System Shutdown" "System will shut down in 30 seconds."
+        notify-send "System Shutdown" "YOOOOOOOOO"
     ) &
 }
 
