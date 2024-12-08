@@ -24,4 +24,3 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 
-alias startvpn 'expect vpn_script'
