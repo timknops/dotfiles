@@ -3,7 +3,8 @@
 sleep 2
 setxkbmap -option ctrl:nocaps
 xcape -e 'Control_L=Escape'
-xrandr --output DP-3 --mode 1920x1080 --rate 144.00
+# xrandr --output DP-3 --mode 1920x1080 --rate 144.00
+xrandr --dpi 192
 
 .config/wallpaper_cycle &
 dunst &

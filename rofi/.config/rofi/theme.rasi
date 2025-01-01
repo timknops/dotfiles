@@ -11,7 +11,7 @@
 
   background-color: @bg;
   text-color: @fg;
-  font: "JetBrainsMono Nerd Font 14";
+  font: "JetBrainsMono Nerd Font 28";
 }
 
 window {
