@@ -1,8 +1,9 @@
 * {
-  border: 2;
+  border: 8;
   margin: 0;
   padding: 0;
   spacing: 0;
+  border-radius: 30px;
 
   bg: #151515;
   bg-alt: #232323;
@@ -11,7 +12,7 @@
 
   background-color: @bg;
   text-color: @fg;
-  font: "JetBrainsMono Nerd Font 28";
+  font: "JetBrainsMono Nerd Font 32";
 }
 
 window {
@@ -29,16 +30,16 @@ inputbar {
 
 entry {
   background-color: inherit;
-  padding: 12px 3px;
+  padding: 12px;
 }
 
 prompt {
   background-color: inherit;
-  padding: 12px;
+  padding: 12px 0 12px 34px;
 }
 
 listview {
-  lines: 8;
+  lines: 10;
 }
 
 element {
@@ -46,7 +47,8 @@ element {
 }
 
 element-icon {
-  padding: 10px 10px;
+  padding: 12px 26px;
+  size: 40px;
 }
 
 element-text {

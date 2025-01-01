@@ -20,17 +20,19 @@
     follow = none
 
     ### Geometry ###
+    geometry = "800x0-20+80"
 
     # dynamic width from 0 to 300
     # width = (0, 300)
     # constant width of 300
-    width = 400
+    # width = 400
 
     # The maximum height of a single notification, excluding the frame.
     height = (0, 400)
 
     # Position the notification in the top right corner
     origin = bottom-right
+    word_wrap = true
 
     # Offset from the origin
     offset = 20x20
@@ -90,10 +92,10 @@
     separator_height = 2
 
     # Padding between text and separator.
-    padding = 15
+    padding = 20
 
     # Horizontal padding.
-    horizontal_padding = 15
+    horizontal_padding = 20
 
     # Padding between text and icon.
     text_icon_padding = 0
@@ -136,7 +138,7 @@
 
     ### Text ###
 
-    font = JetBrainsMono Nerd Font 10 
+    font = JetBrainsMono Nerd Font 11
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.
@@ -327,7 +329,7 @@
     # dunst will attempt to calculate an appropriate dpi value for each monitor
     # using the resolution and physical size. This might be useful in setups
     # where there are multiple screens with very different dpi values.
-    per_monitor_dpi = false
+    # per_monitor_dpi = true
 
 
 [urgency_low]
@@ -387,7 +389,7 @@
 #    skip_display
 #    history_ignore
 #    action_name
-    word_wrap = yes
+    # word_wrap = yes
 #    ellipsize
 #    alignment
 #    hide_text
