@@ -234,5 +234,5 @@ client.background       $fg
 hide_edge_borders smart
 
 # Manually trigger lock screen
-bindsym $mod+Shift+x exec --no-startup-id i3lock -i $HOME/.config/wallpapers/lockscreen/lockscreen.png
+bindsym $mod+Shift+x exec --no-startup-id i3lock -i $HOME/.config/wallpapers/lockscreen/lockscreen_2.png
 
