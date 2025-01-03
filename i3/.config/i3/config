@@ -198,8 +198,8 @@ exec --no-startup-id ~/i3_startup
 exec --no-startup-id redshift
 
 # Polybar
-exec_always --no-startup-id killall -q polybar
-exec_always --no-startup-id sleep 0.5; polybar top --config=$HOME/.config/polybar/config.ini
+# exec_always --no-startup-id killall -q polybar
+# exec_always --no-startup-id sleep 0.5; polybar laptop --config=$HOME/.config/polybar/config.ini
 
 # Picom
 exec_always --no-startup-id killall -q picom
