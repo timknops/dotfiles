@@ -18,8 +18,8 @@ schedule_shutdown() {
     ) &
 }
 
-journalctl -f -n 0 | while read line; do
-    if echo "$line" | grep -q "System shutdown has been cancelled"; then
+journalctl --user -o cat -f | while read -r line; do
+    if [[ "$line" == *"System shutdown has been cancelled"* ]]; then
         notify-send "Shutdown Cancelled" "System shutdown has been cancelled."
         schedule_shutdown
     fi
