@@ -1,12 +1,12 @@
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-vim.keymap.set('n', 'q', '<Nop>', { desc = 'Disable q' })
+-- vim.keymap.set('n', 'q', '<Nop>', { desc = 'Disable q' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
@@ -26,8 +26,14 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and keep cursor in t
 vim.keymap.set('n', 'n', 'nzz', { desc = 'Move to next search result and keep cursor in the middle' })
 vim.keymap.set('n', 'N', 'Nzz', { desc = 'Move to previous search result and keep cursor in the middle' })
 
--- NOTE: Caps Lock is set to Ctrl for better ergonomics
 vim.keymap.set('i', '<C-c>', '<nop>')
 
 -- Paste without yanking
 vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yanking' })
+
+-- Keybinds for buffer navigation
+vim.keymap.set('n', '<C-p>', '<Cmd>BufferPrevious<CR>', { desc = 'Go to previous buffer' })
+vim.keymap.set('n', '<C-n>', '<Cmd>BufferNext<CR>', { desc = 'Go to next buffer' })
+vim.keymap.set('n', '<C-q>', '<Cmd>BufferClose<CR>', { desc = 'Close buffer' })
+vim.keymap.set('n', '<C-h>', '<Cmd>BufferMovePrevious<CR>', { desc = 'Move current buffer a position back' })
+vim.keymap.set('n', '<C-l>', '<Cmd>BufferMoveNext<CR>', { desc = 'Move current buffer to next position' })

@@ -8,6 +8,7 @@ return {
         icons_enabled = true,
         theme = 'gruvbox-material',
         component_separators = { left = '|', right = '|' },
+
       },
       sections = {
         lualine_a = { 'mode' },
@@ -24,3 +25,4 @@ return {
     }
   end,
 }
+
