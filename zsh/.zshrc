@@ -113,3 +113,7 @@ source $HOME/toolchain/bin/civ_complete.bash
 
 export PATH="/home/tim/.config/herd-lite/bin:$PATH"
 export PHP_INI_SCAN_DIR="/home/tim/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
+
+export PATH="$HOME/.elan/env:$PATH"
+
+[ -f "/home/tim/.ghcup/env" ] && . "/home/tim/.ghcup/env" # ghcup-env
