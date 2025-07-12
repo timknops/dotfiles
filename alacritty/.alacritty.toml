@@ -1,11 +1,9 @@
-[terminal.shell]
-program = "/bin/zsh"
-
 [env]
 TERM = "xterm-256color"
 
 [window]
 dynamic_padding = true
+opacity = 0.9
 
 [font]
 size = 14
