@@ -39,16 +39,19 @@ let g:NERDTreeWinSize = 30
 nmap m :NERDTreeToggle<CR>
 
 " For switching between tabs/panes
-nnoremap <C-n> :tabnext<CR>
-nnoremap <C-p> :tabprevious<CR>
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
+nnoremap <C-l> :tabnext<CR>
+nnoremap <C-h> :tabprevious<CR>
+nnoremap <C-j> <C-w>h
+nnoremap <C-k> <C-w>l
+" nnoremap <C-j> <C-w>j
+" nnoremap <C-k> <C-w>k
 
 " For splitting and unsplitting
 map <leader>v <Action>(SplitVertically)
 map <leader>u <Action>(Unsplit)
+
+" For closing the current pane
+map <C-w> <Action>(CloseContent)
 
 " Comment lines
 vmap gc <Action>(CommentByLineComment)<Esc>
@@ -80,12 +83,21 @@ nnoremap <C-u> <C-u>zz
 nnoremap n nzz
 nnoremap N Nzz
 
-" For some reason, only the up arrow key needs to be remapped
+" For some reason, only the up arrow key needs to be remapped for going up and down a dropdown list
 imap <C-k> <C-p>
 
 " For searching everywhere
 nmap <leader>se <Action>(SearchEverywhere)
-nmap <leader>sf <Action>(com.mituuz.fuzzier.Fuzzier)
+nmap <leader>sf <Action>(GotoFile)
 
 " For accepting lookup and copilot
 imap <C-l> <Action>(EditorChooseLookupItem)<Action>(copilot.applyInlays)
+
+" Laravel idea plugin code generation
+nmap <leader>g <Action>(com.laravel_idea.plugin.LaravelActionChooser)
+vmap <C-g> <Action>(Generate)
+imap <C-g> <Action>(Generate)
+
+" Refactoring
+vmap <C-r> <Action>(Refactorings.QuickListPopupAction)
+
