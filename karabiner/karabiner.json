@@ -660,6 +660,61 @@
                     "value": 1
                   }
                 ]
+              },
+              {
+                "type": "basic",
+                "from": { "key_code": "y" },
+                "to": [
+                  { "key_code": "a", "modifiers": ["left_control"] },
+                  { "key_code": "1" }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": { "key_code": "u" },
+                "to": [
+                  { "key_code": "a", "modifiers": ["left_control"] },
+                  { "key_code": "2" }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": { "key_code": "i" },
+                "to": [
+                  { "key_code": "a", "modifiers": ["left_control"] },
+                  { "key_code": "3" }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": { "key_code": "o" },
+                "to": [
+                  { "key_code": "a", "modifiers": ["left_control"] },
+                  { "key_code": "4" }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": { "key_code": "p" },
+                "to": [
+                  { "key_code": "a", "modifiers": ["left_control"] },
+                  { "key_code": "5" }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
               }
             ]
           },
@@ -1621,6 +1676,12 @@
                     }
                   }
                 ],
+                "to_if_alone": [
+                  {
+                    "key_code": "hyphen",
+                    "modifiers": ["left_shift"]
+                  }
+                ],
                 "to_after_key_up": [
                   {
                     "set_variable": {
@@ -1629,6 +1690,9 @@
                     }
                   }
                 ],
+                "parameters": {
+                  "basic.to_if_alone_timeout_milliseconds": 500
+                },
                 "conditions": [
                   {
                     "type": "device_if",
