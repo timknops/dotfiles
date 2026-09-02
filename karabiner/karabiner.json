@@ -321,6 +321,148 @@
             ]
           },
           {
+            "description": "Control to Command: copy, paste, cut, undo, redo, select all (except in terminals)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "c",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [{ "key_code": "c", "modifiers": ["left_command"] }],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_unless",
+                    "bundle_identifiers": [
+                      "com.apple.Terminal",
+                      "com.googlecode.iterm2",
+                      "org.alacritty",
+                      "co.zeit.hyper",
+                      "dev.warp.Warp-Stable",
+                      "net.kovidgoyal.kitty",
+                      "com.github.wez.wezterm"
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "v",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [{ "key_code": "v", "modifiers": ["left_command"] }],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_unless",
+                    "bundle_identifiers": [
+                      "com.apple.Terminal",
+                      "com.googlecode.iterm2",
+                      "org.alacritty",
+                      "co.zeit.hyper",
+                      "dev.warp.Warp-Stable",
+                      "net.kovidgoyal.kitty",
+                      "com.github.wez.wezterm"
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "x",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [{ "key_code": "x", "modifiers": ["left_command"] }],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_unless",
+                    "bundle_identifiers": [
+                      "com.apple.Terminal",
+                      "com.googlecode.iterm2",
+                      "org.alacritty",
+                      "co.zeit.hyper",
+                      "dev.warp.Warp-Stable",
+                      "net.kovidgoyal.kitty",
+                      "com.github.wez.wezterm"
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "z",
+                  "modifiers": { "mandatory": ["control", "shift"], "optional": ["any"] }
+                },
+                "to": [
+                  {
+                    "key_code": "z",
+                    "modifiers": ["left_command", "left_shift"]
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_unless",
+                    "bundle_identifiers": [
+                      "com.apple.Terminal",
+                      "com.googlecode.iterm2",
+                      "org.alacritty",
+                      "co.zeit.hyper",
+                      "dev.warp.Warp-Stable",
+                      "net.kovidgoyal.kitty",
+                      "com.github.wez.wezterm"
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "z",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [{ "key_code": "z", "modifiers": ["left_command"] }],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_unless",
+                    "bundle_identifiers": [
+                      "com.apple.Terminal",
+                      "com.googlecode.iterm2",
+                      "org.alacritty",
+                      "co.zeit.hyper",
+                      "dev.warp.Warp-Stable",
+                      "net.kovidgoyal.kitty",
+                      "com.github.wez.wezterm"
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "a",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [{ "key_code": "a", "modifiers": ["left_command"] }],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_unless",
+                    "bundle_identifiers": [
+                      "com.apple.Terminal",
+                      "com.googlecode.iterm2",
+                      "org.alacritty",
+                      "co.zeit.hyper",
+                      "dev.warp.Warp-Stable",
+                      "net.kovidgoyal.kitty",
+                      "com.github.wez.wezterm"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "description": "Kinesis: shift layer restores digits 1-0",
             "manipulators": [
               {
