@@ -1,0 +1,154 @@
+;; Kanata config — Linux desktop with Kinesis (always full layout)
+;;
+;; Use this on Linux when your Kinesis is the only keyboard you care about.
+;; For MacBook + Kinesis switching, use kanata.kbd instead.
+;;
+;; Panic: hold Left Control + Space + Escape
+
+(defcfg
+  process-unmapped-keys yes)
+
+(defvar
+  tt 200
+  ht 200)
+
+(defalias
+  nav-layer (layer-while-held nav)
+  kpd-layer (layer-while-held keypad)
+
+  esc-ctl (tap-hold $tt $ht esc lctl)
+  ent-nav (tap-hold $tt $ht ret @nav-layer)
+  end-nav (tap-hold $tt $ht end @nav-layer)
+  pgup-kpd (tap-hold $tt $ht pgup @kpd-layer)
+
+  lsh (multi lsft (layer-while-held shift))
+  rsh (multi rsft (layer-while-held shift))
+)
+
+(defsrc)
+
+(deflayermap (base)
+  1    S-1
+  2    [
+  3    S-9
+  4    S-[
+  5    =
+  6    S-8
+  7    S-]
+  8    S-0
+  9    ]
+  0    S-7
+
+  caps S-2
+  left S-=
+  rght S-6
+  up   S-4
+  down S-3
+  [    S-5
+
+  lctl @esc-ctl
+  ret  @ent-nav
+  end  @end-nav
+  pgdn @kpd-layer
+  pgup @pgup-kpd
+
+  lsft @lsh
+  rsft @rsh
+)
+
+(deflayermap (shift)
+  1 1
+  2 2
+  3 3
+  4 4
+  5 5
+  6 6
+  7 7
+  8 8
+  9 9
+  0 0
+)
+
+(deflayermap (nav)
+  h left
+  j down
+  k up
+  l rght
+
+  a A-1
+  s A-2
+  d A-3
+  f A-4
+  g A-5
+
+  y (macro C-a 10 1)
+  u (macro C-a 10 2)
+  i (macro C-a 10 3)
+  o (macro C-a 10 4)
+  p (macro C-a 10 5)
+
+  n A-d
+  m A-f
+  q A-q
+  ret A-ret
+)
+
+(deflayermap (keypad)
+  lctl 0
+  x    1
+  c    2
+  v    3
+  s    4
+  d    5
+  f    6
+  w    7
+  e    8
+  r    9
+)
+
+(deflayermap (symbol)
+  =    grv
+  1    [
+  2    (
+  3    )
+  4    ]
+  5    .
+  tab  !
+  q    ,
+  w    {
+  e    }
+  r    ;
+  t    ?
+  esc  #
+  a    ^
+  s    =
+  d    _
+  f    S-4
+  g    *
+  lsft ~
+  z    <
+  x    |
+  c    -
+  v    >
+  b    /
+  grv  &
+  caps '
+  left "
+  rght +
+  y    grv
+  h    "
+  n    '
+)
+
+(deflayermap (symbol2)
+  a #
+  s [
+  d {
+  f (
+  g *
+  w ^
+  r S-4
+  j )
+  k }
+  l ]
+)
