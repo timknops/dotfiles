@@ -126,11 +126,66 @@
             ]
           },
           {
-            "description": "Nav layer: hjkl to arrows",
+            "description": "Nav layer: hjkl to arrows (with Control for word/line jump)",
             "manipulators": [
               {
                 "type": "basic",
-                "from": { "key_code": "h" },
+                "from": {
+                  "key_code": "h",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [
+                  { "key_code": "left_arrow", "modifiers": ["left_control"] }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "j",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [
+                  { "key_code": "down_arrow", "modifiers": ["left_control"] }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "k",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [
+                  { "key_code": "up_arrow", "modifiers": ["left_control"] }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "l",
+                  "modifiers": { "mandatory": ["control"], "optional": ["any"] }
+                },
+                "to": [
+                  { "key_code": "right_arrow", "modifiers": ["left_control"] }
+                ],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "h",
+                  "modifiers": { "optional": ["any"] }
+                },
                 "to": [{ "key_code": "left_arrow" }],
                 "conditions": [
                   { "type": "variable_if", "name": "nav_layer", "value": 1 }
@@ -138,7 +193,10 @@
               },
               {
                 "type": "basic",
-                "from": { "key_code": "j" },
+                "from": {
+                  "key_code": "j",
+                  "modifiers": { "optional": ["any"] }
+                },
                 "to": [{ "key_code": "down_arrow" }],
                 "conditions": [
                   { "type": "variable_if", "name": "nav_layer", "value": 1 }
@@ -146,7 +204,10 @@
               },
               {
                 "type": "basic",
-                "from": { "key_code": "k" },
+                "from": {
+                  "key_code": "k",
+                  "modifiers": { "optional": ["any"] }
+                },
                 "to": [{ "key_code": "up_arrow" }],
                 "conditions": [
                   { "type": "variable_if", "name": "nav_layer", "value": 1 }
@@ -154,7 +215,10 @@
               },
               {
                 "type": "basic",
-                "from": { "key_code": "l" },
+                "from": {
+                  "key_code": "l",
+                  "modifiers": { "optional": ["any"] }
+                },
                 "to": [{ "key_code": "right_arrow" }],
                 "conditions": [
                   { "type": "variable_if", "name": "nav_layer", "value": 1 }
