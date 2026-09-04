@@ -1,0 +1,6 @@
+onboarding = false
+
+[keys]
+prefix = "ctrl+a"
+next_tab = "prefix+l"
+previous_tab = "prefix+h"
