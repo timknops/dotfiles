@@ -1,0 +1,11 @@
+theme = Gruvbox Dark
+background = #1b1b1b
+
+font-family = JetBrains Mono Nerd Font
+font-size = 14
+
+background-opacity = 0.9
+cursor-style = bar
+window-padding-balance = true
+
+gtk-titlebar-hide-when-maximized = true
