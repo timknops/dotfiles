@@ -1,0 +1,5 @@
+interface:
+  display_name: "Grill Blind"
+  short_description: "Grill a design with recommendations hidden"
+policy:
+  allow_implicit_invocation: false

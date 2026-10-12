@@ -1,0 +1,5 @@
+interface:
+  display_name: "Drive"
+  short_description: "Build a ticket yourself with a co-pilot that holds back"
+policy:
+  allow_implicit_invocation: false

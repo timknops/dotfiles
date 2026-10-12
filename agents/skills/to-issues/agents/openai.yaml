@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Issues"
+  short_description: "Turn a shaped idea into a spec and tickets on GitHub"
+policy:
+  allow_implicit_invocation: false
