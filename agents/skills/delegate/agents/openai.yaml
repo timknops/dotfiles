@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delegate"
+  short_description: "Hand a ticket to the agent, built in its own worktree"
+policy:
+  allow_implicit_invocation: false

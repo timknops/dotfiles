@@ -95,17 +95,19 @@ The PR opens only when the user says they're done. Then:
 
 Keep the description short. In ticket mode the title is the ticket's title.
 
+If the repo has a PR template (`.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE.md`, the same names in the root or `docs/`, or `.github/PULL_REQUEST_TEMPLATE/`), fill it in and follow its structure. Otherwise use:
+
 ```markdown
 <1 to 3 lines on what changed, in glossary terms.>
 
-## Tests
-- <acceptance criterion> → `<test name>`
-- <acceptance criterion> → no test (opened anyway)
+- [x] Every acceptance criterion is covered by a test
 
 <One line on why it's large, only if the PR is notably large for one ticket. Ask the user for the reason. Don't invent one.>
 
 Closes #<n>
 ```
+
+Tick the test checkbox (in the template or the fallback) only when every criterion has a test. If the PR was opened anyway with gaps, leave it unticked and name the uncovered criteria on the line below it.
 
 ### "To design" notice
 
