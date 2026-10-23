@@ -4,3 +4,14 @@ onboarding = false
 prefix = "ctrl+a"
 next_tab = "prefix+l"
 previous_tab = "prefix+h"
+focus_pane_left = ""
+focus_pane_right = ""
+
+[[keys.command]]
+key = "prefix+a"
+type = "shell"
+command = "~/.config/herdr/scripts/focus-attention.sh"
+description = "focus agent needing attention"
+
+[ui]
+agent_panel_sort = "priority"
