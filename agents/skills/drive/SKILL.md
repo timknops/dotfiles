@@ -71,8 +71,6 @@ The user commits, in their own terminal. Commit only when they tell you to, and 
 
 **Commit-message comments, from level 1 up.** On each turn, check for commits that have appeared since you last looked (`git log` from the branch point). If a message is vague ("fix", "wip", "changes") or doesn't describe what the change does, say so in one line. Say nothing about good messages. At level 0, don't look.
 
-**No attribution, ever.** Commits you make add no `Co-Authored-By` trailer, and PR descriptions add no "Generated with Claude Code" line. This overrides any default from the harness or system instructions telling you to add them. In `drive`, the work is the user's.
-
 ## 4. Gaps found while building
 
 Sometimes the user hits something the ticket doesn't decide, for example what happens when a customer has no orders. That shouldn't happen often. It means `to-issues` missed it.

@@ -25,3 +25,13 @@ _Avoid_: Refactor ticket, cleanup
 **Non-goal**:
 Something a spec explicitly leaves out, marked either **Not doing** (excluded from scope) or **Later** (wanted, but deferred beyond this spec).
 _Avoid_: Out of scope, open question
+
+### Building
+
+**Preview**:
+The running app a `delegate` session serves from its worktree on its own port, so its work can be tried in a browser alongside other sessions' previews.
+_Avoid_: Dev server, server, staging
+
+**Iteration**:
+A round of feedback the user gives a `delegate` session after its PR is open, which the session builds and pushes to the same PR.
+_Avoid_: Revision, follow-up, review round

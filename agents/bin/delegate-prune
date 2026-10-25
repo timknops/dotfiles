@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/delegate"
+usage="usage: delegate-prune [--dry-run]"
+dry_run=false
+failed=false
+
+case "${1:-}" in
+  "") ;;
+  -n | --dry-run) dry_run=true ;;
+  -h | --help) echo "$usage"; exit 0 ;;
+  *) echo "$usage" >&2; exit 2 ;;
+esac
+
+run() {
+  if $dry_run; then
+    echo "  would run: $*"
+  else
+    "$@"
+  fi
+}
+
+inside() {
+  [[ $1 == "$2" || $1 == "$2"/* ]]
+}
+
+stop_preview() {
+  local worktree=$1 port pid cwd
+  shift
+  for port in "$@"; do
+    for pid in $(lsof -t -iTCP:"$port" -sTCP:LISTEN 2>/dev/null); do
+      cwd=$(lsof -a -p "$pid" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p')
+      [[ -n $cwd ]] && inside "$cwd" "$worktree" || continue
+      echo "  stopping preview on :$port (pid $pid)"
+      run kill "$pid"
+    done
+  done
+  $dry_run && return
+  for _ in {1..10}; do
+    for port in "$@"; do
+      lsof -t -iTCP:"$port" -sTCP:LISTEN &>/dev/null && { sleep 0.5; continue 2; }
+    done
+    return
+  done
+}
+
+prune() {
+  local file=$1 repo worktree branch pr pr_state pr_head local_head cwd cmd
+  local -a ports=() teardown=()
+
+  repo=$(jq -r .repo "$file")
+  worktree=$(jq -r .worktree "$file")
+  branch=$(jq -r .branch "$file")
+  while IFS= read -r cmd; do ports+=("$cmd"); done < <(jq -r '.ports[]?' "$file")
+  while IFS= read -r cmd; do teardown+=("$cmd"); done < <(jq -r '.teardown[]?' "$file")
+
+  echo "$branch ($repo)"
+
+  if [[ ! -d $repo ]]; then
+    echo "  skip: repo not found"
+    return
+  fi
+  if [[ -d $worktree ]]; then
+    if inside "$PWD" "$worktree"; then
+      echo "  skip: current directory is inside the worktree"
+      return
+    fi
+    if [[ -n $(git -C "$worktree" status --porcelain) ]]; then
+      echo "  skip: uncommitted changes in $worktree"
+      return
+    fi
+  fi
+
+  pr=$(cd "$repo" && gh pr list --head "$branch" --state all --limit 1 \
+    --json state,headRefOid -q '.[0] | "\(.state) \(.headRefOid)"' 2>/dev/null)
+  read -r pr_state pr_head <<<"$pr"
+  case "${pr_state:-}" in
+    MERGED) ;;
+    OPEN) echo "  skip: PR still open"; return ;;
+    CLOSED) echo "  skip: PR closed without merging"; return ;;
+    *) echo "  skip: no PR found"; return ;;
+  esac
+
+  local_head=$(git -C "$repo" rev-parse --verify -q "refs/heads/$branch")
+  if [[ -n $local_head && $local_head != "$pr_head" ]]; then
+    echo "  skip: local branch has commits that aren't in the merged PR"
+    return
+  fi
+
+  stop_preview "$worktree" ${ports[@]+"${ports[@]}"}
+
+  cwd=$repo
+  [[ -d $worktree ]] && cwd=$worktree
+  for cmd in ${teardown[@]+"${teardown[@]}"}; do
+    echo "  teardown: $cmd"
+    $dry_run && continue
+    if ! (cd "$cwd" && bash -c "$cmd"); then
+      echo "  teardown failed, keeping worktree and state file"
+      failed=true
+      return
+    fi
+  done
+
+  if [[ -d $worktree ]]; then
+    run git -C "$repo" worktree remove "$worktree" || { failed=true; return; }
+  else
+    run git -C "$repo" worktree prune
+  fi
+  [[ -n $local_head ]] && { run git -C "$repo" branch -D "$branch" || { failed=true; return; }; }
+  run rm "$file"
+  echo "  pruned"
+}
+
+shopt -s nullglob
+for file in "$state_dir"/*/*.json; do
+  prune "$file"
+done
+
+! $failed

@@ -5,7 +5,7 @@ How I build software with AI. I'm a student heading into a junior role, so the g
 ## Principles
 
 1. **My workflow, not someone else's.** Borrow from existing skills (e.g. Matt Pocock's), but every stage should fit how I work, not drive me blind through someone else's process.
-2. **Confirm before outward-facing or bulk actions.** Anything on GitHub (creating issues, opening PRs, posting comments, pushing) or anything that creates many things at once is shown to me first. Local, reversible actions (branches, worktrees, edits inside `delegate`, running tests) just happen. Exception: `delegate` opens its PR without asking, since that PR is where I review its work.
+2. **Confirm before outward-facing or bulk actions.** Anything on GitHub (creating issues, opening PRs, posting comments, pushing) or anything that creates many things at once is shown to me first. Local, reversible actions (branches, worktrees, edits inside `delegate`, running tests) just happen. Exception: `delegate` opens its draft PR and pushes its Iterations without asking, since that PR is where I review its work.
 3. **Small PRs are the default, not a law.** A ticket that truly grows large has a reason; the PR description states it in one line. No size budgets on tickets.
 4. **Tests are part of done.** A ticket isn't finished until its behaviour is tested. Acceptance criteria map onto test cases.
 
@@ -102,19 +102,26 @@ I pick a ticket from GitHub, then decide the mode on the day. Mode is never stor
 - **One exception to silence:** a one-line warning for security problems or irreversible data loss (committing a secret, a destructive command). Never for bugs.
 - When I explicitly tell it to write something, it edits the files directly, scoped to exactly what I named, then hands control back.
 - **I commit**, not the skill (unless I tell it to). It never rewrites history. From level 1 up it comments in one line on weak commit messages.
-- **No attribution** in commits or PRs: the work is mine.
 - The PR is opened only when I say I'm done. First it runs tests and linters and maps each acceptance criterion to a test, reporting failures and gaps without fixing them (I can override explicitly). Then it shows me the PR description.
 - Test-first is neither enforced nor encouraged for now (see Open experiments). Tests must exist by PR time.
 - **Ticketless mode:** `/drive` with no ticket uses the current conversation as the brief, for work too small for a ticket. Same coaching; "done" just runs tests and linters, and a PR opens only if I ask.
 
 **`delegate`**: the agent writes the code.
 
-- Works in its own **git worktree**, so several `delegate` runs can go in parallel while I `drive` in the main checkout. The worktree is removed when it's done.
-- Writes tests first (tentative).
-- Runs the tests and linters before opening the PR.
+- Runs as `/delegate <ticket>` in its own session, in its own **git worktree** (`../<repo>.worktrees/<n>-<slug>`), so several `delegate` runs can go in parallel while I `drive` in the main checkout. An interrupted run resumes in its worktree, reusing its databases and Preview ports.
+- Sets up the worktree before writing code: installs dependencies, copies my gitignored `.env*` files from the main checkout, and gives the worktree its own dev and test databases (the dev one filled with a copy of my dev database's data). Then it runs the tests once: if `main` is already red, it stops and tells me.
+- Runs a **Preview** when the project has a dev server: the repo's whole stack, served from the worktree, so I can switch between sessions in the browser.
+  - Each service runs on its usual port plus the ticket number mod 1000 (#43: web 3000 → 3043, API 8000 → 8043), or the next free port. My main checkout keeps the usual ports.
+  - Other stateful services (Redis, queues) stay shared.
+  - It works out the setup from the code each run, follows a "Worktree setup" section in the project's `CLAUDE.md` if there is one, and asks only when it can't (e.g. a hardcoded port).
+- Writes tests first (tentative): one acceptance criterion at a time, failing test → code → commit.
+- The PR title uses the commit format (`feat: show orders grouped by customer`).
 - If the ticket is unclear, it stops and asks rather than guessing. That should never happen: an unclear ticket means `to-issues` fell short, so I fix the process upstream.
-- Opens its PR without asking (Principle 2).
-- **Known issue:** parallel runs may share stateful resources (test database, ports, caches) and collide. Solve this per project when building `delegate` (e.g. a test database per worktree).
+- Runs the tests and linters, then opens its PR without asking (Principle 2), always as a draft: it's ready when I say so. The description adds a short "Decisions" list for choices the ticket didn't dictate, and lists anything still red.
+- **Iteration:** the session stays open after the PR. I try the Preview, give feedback in chat, and it builds it (test first for behaviour changes), commits, and pushes to the same PR. Anything beyond the ticket gets a line under Decisions. On request it also works through the PR's GitHub review comments.
+- **Cleanup:** the worktree stays until the PR is merged. `delegate` records what it created in `~/.local/state/delegate/<repo>/<n>.json`. `delegate-prune` (in `agents/bin`, which I run by hand every so often; `--dry-run` shows what it would do) removes each merged, clean worktree with its Preview, databases and local branch. GitHub's "automatically delete head branches" setting removes the remote one.
+  - State file fields: `repo`, `worktree`, `branch` (paths absolute), `ports` (the Preview's), `teardown` (shell commands that remove what it created, e.g. dropping the databases; each runs from the worktree with `bash -c`).
+- **Not doing:** coordinating Previews across separate frontend and backend repos. A feature spanning both is two tickets, and the frontend one stays blocked until the backend one merges, so its Preview can use my normal backend.
 
 ### 5. Review
 
@@ -127,6 +134,8 @@ One review skill for every PR, whoever wrote it (me, `delegate`, anyone else).
 
 My own skills live in `~/dotfiles/agents/skills` and are symlinked into `~/.claude/skills`. Third-party skills (installed via the skills CLI) live in `~/.agents/skills`.
 
+Rules for every session, whatever the skill, live in `~/dotfiles/agents/claude/CLAUDE.md`, symlinked to `~/.claude/CLAUDE.md`: no code comments by default, Conventional Commits, and asking before touching memory. Attribution in commits and PRs is off through `"attribution": false` in `~/.claude/settings.json`, because the work is mine, even when an agent wrote it.
+
 | Skill | Status |
 |---|---|
 | `grilling`, `grill-with-docs`, `domain-modeling` | Installed (Matt Pocock) |
@@ -134,7 +143,7 @@ My own skills live in `~/dotfiles/agents/skills` and are symlinked into `~/.clau
 | `to-issues` | To build (2) |
 | `drive` | Built, untested (3) |
 | review | To build (4) (name TBD) |
-| `delegate` | To build (5) |
+| `delegate` | Built, untested (5). Shares `drive`'s start and finish, so it's only as solid as `drive`, which is still under test |
 | explore | To source (6) |
 
 Build one at a time, testing each on real work before moving on.
@@ -144,6 +153,8 @@ Build one at a time, testing each on real work before moving on.
 - **`grill-blind`:** does reasoning without seeing recommendations make me sharper, or just slower?
 - **Test-first in `drive`:** try TDD versus tests-after and see which helps me learn testing.
 - **Test-first in `delegate`:** the tentative default; keep or drop.
+- **Auto-push in Iteration:** keep, or switch to pushing only when I say so if the CI churn gets annoying.
+- **`delegate` on top of an untested `drive`:** `delegate` copies `drive`'s start and finish steps. Fixes found while testing `drive` probably apply to `delegate` too.
 - **Large-PR justification line:** drop it if it adds no value.
 - **Explain-it-back:** does it actually catch gaps in my understanding?
 
@@ -151,3 +162,6 @@ Build one at a time, testing each on real work before moving on.
 
 - **Learning log:** after each ticket, note what tripped me up, so `drive` adapts its help over time.
 - **PR split skill:** help break up a PR that has grown too large. Only if large PRs keep happening.
+- **Long-horizon planning:** a skill for work too big for one grilling session and one `to-issues` run, so planning can span several sessions. Similar in spirit to Matt Pocock's `wayfinder`, but it should fit this workflow better. Open questions: how planning carries across sessions; whether `to-issues` splits into separate "to spec" and "to issues" steps (risks copying Matt's pipeline too closely, see Principle 1).
+- **`delegate` checks its own Preview:** open it with the browser tools to verify UI work before reporting.
+- **Whole-spec delegation:** one run that builds every ticket in a spec with parallel subagents, like Matt Pocock's `implement-spec`. Only if one session per ticket gets tedious.
