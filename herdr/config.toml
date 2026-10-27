@@ -6,6 +6,13 @@ next_tab = "prefix+l"
 previous_tab = "prefix+h"
 focus_pane_left = ""
 focus_pane_right = ""
+split_vertical = ""
+
+[[keys.command]]
+key = "prefix+v"
+type = "shell"
+command = "~/.config/herdr/scripts/equalize.py split right"
+description = "split right and equalize columns"
 
 [[keys.command]]
 key = "prefix+a"
