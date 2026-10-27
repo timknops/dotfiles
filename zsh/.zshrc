@@ -103,15 +103,31 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# go
 export PATH=$PATH:$HOME/toolchain/bin
 export PATH=$PATH:/usr/local/go/bin
+
+# elixir
 export PATH=$PATH:$HOME/.asdf
 export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
+
+export PATH=$PATH:$HOME/.dotnet
+
 alias bat=batcat
-export PATH="/home/tim/.config/herd-lite/bin:$PATH"
-export PHP_INI_SCAN_DIR="/home/tim/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
+# export PATH="/home/tim/.config/herd-lite/bin:$PATH"
+# export PHP_INI_SCAN_DIR="/home/tim/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+
+export PATH="$PATH:$HOME/.config/composer/vendor/bin"
+
+export PATH=~/bin:$PATH
+[[ -n $HERDR_ENV ]] && ~/.config/herdr/scripts/equalize.py watch &>/dev/null &!
 
