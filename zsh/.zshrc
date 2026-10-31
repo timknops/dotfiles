@@ -115,6 +115,7 @@ export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 export PATH=$PATH:$HOME/.dotnet
 
 alias bat=batcat
+alias nv='NVIM_APPNAME=nvim-new nvim'
 # export PATH="/home/tim/.config/herd-lite/bin:$PATH"
 # export PHP_INI_SCAN_DIR="/home/tim/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 
