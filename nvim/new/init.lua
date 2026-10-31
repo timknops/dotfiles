@@ -2,6 +2,8 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<leader>sf", "<cmd>FzfLua files<CR>", { desc = "Search files" })
+vim.keymap.set("n", "<leader>sg", "<cmd>FzfLua live_grep<CR>", { desc = "Grep within files" })
 
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -56,3 +58,10 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.treesitter.start()
     end,
 })
+
+vim.pack.add({
+    "https://github.com/ibhagwan/fzf-lua",
+    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") }
+})
+
+require("blink.cmp").setup()
