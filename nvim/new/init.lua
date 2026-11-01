@@ -44,6 +44,8 @@ local format_group = vim.api.nvim_create_augroup("lsp-format", { clear = true })
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
     callback = function(args)
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = args.buf, desc = "Goto definition" })
+
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if not client or not client:supports_method("textDocument/formatting") then return end
 
