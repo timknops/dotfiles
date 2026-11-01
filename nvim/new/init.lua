@@ -22,6 +22,8 @@ vim.opt.undofile = true
 
 vim.opt.splitright = true
 
+vim.opt.signcolumn = "yes"
+
 vim.schedule(function()
     vim.opt.clipboard = "unnamedplus"
 end)
@@ -67,6 +69,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.pack.add({
     "https://github.com/ibhagwan/fzf-lua",
     "https://github.com/stevearc/oil.nvim",
+    "https://github.com/lewis6991/gitsigns.nvim",
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") }
 })
 
