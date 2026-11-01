@@ -4,6 +4,9 @@ vim.g.maplocalleader = " "
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>sf", "<cmd>FzfLua files<CR>", { desc = "Search files" })
 vim.keymap.set("n", "<leader>sg", "<cmd>FzfLua live_grep<CR>", { desc = "Grep within files" })
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Open parent directory" })
 
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -16,6 +19,8 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 vim.opt.undofile = true
+
+vim.opt.splitright = true
 
 vim.schedule(function()
     vim.opt.clipboard = "unnamedplus"
@@ -61,7 +66,13 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.pack.add({
     "https://github.com/ibhagwan/fzf-lua",
+    "https://github.com/stevearc/oil.nvim",
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") }
 })
 
 require("blink.cmp").setup()
+require("oil").setup({
+    view_options = {
+        show_hidden = true
+    }
+})
