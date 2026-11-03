@@ -6,6 +6,9 @@ font-size = 14
 
 background-opacity = 0.9
 cursor-style = bar
-window-padding-balance = true
+window-padding-x = 0
+window-padding-y = 0
+window-padding-balance = equal
+window-padding-color = background
 
 gtk-titlebar-hide-when-maximized = true

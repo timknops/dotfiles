@@ -1,0 +1,23 @@
+#!/bin/sh
+cat >/dev/null
+[ -n "$TMUX_PANE" ] || exit 0
+
+state=$1
+
+if [ "$state" = clear ]; then
+  tmux set -pu -t "$TMUX_PANE" @claude_state
+  tmux refresh-client -S 2>/dev/null
+  exit 0
+fi
+
+if [ "$state" = done ]; then
+  session=$(tmux display -p -t "$TMUX_PANE" '#{?#{&&:#{pane_active},#{window_active}},#{session_name},}')
+  if [ -n "$session" ] &&
+    tmux list-clients -F '#{?#{m:*focused*,#{client_flags}},#{client_session},}' | grep -qxF "$session"; then
+    state=idle
+  fi
+fi
+
+tmux set -p -t "$TMUX_PANE" @claude_state "$state"
+tmux refresh-client -S 2>/dev/null
+exit 0
