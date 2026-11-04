@@ -24,6 +24,8 @@ vim.opt.splitright = true
 
 vim.opt.signcolumn = "yes"
 
+vim.opt.scrolloff = 5
+
 vim.schedule(function()
     vim.opt.clipboard = "unnamedplus"
 end)
