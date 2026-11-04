@@ -7,6 +7,8 @@ vim.keymap.set("n", "<leader>sg", "<cmd>FzfLua live_grep<CR>", { desc = "Grep wi
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "<M-h>", "<cmd>TmuxNavigateLeft<CR>", { desc = "Focus split or tmux pane left" })
+vim.keymap.set("n", "<M-l>", "<cmd>TmuxNavigateRight<CR>", { desc = "Focus split or tmux pane right" })
 
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -70,7 +72,10 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+vim.g.tmux_navigator_no_mappings = 1
+
 vim.pack.add({
+    "https://github.com/christoomey/vim-tmux-navigator",
     "https://github.com/ibhagwan/fzf-lua",
     "https://github.com/stevearc/oil.nvim",
     "https://github.com/lewis6991/gitsigns.nvim",

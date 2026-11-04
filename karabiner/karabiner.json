@@ -663,6 +663,22 @@
               },
               {
                 "type": "basic",
+                "from": { "key_code": "e" },
+                "to": [{ "key_code": "h", "modifiers": ["left_option"] }],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": { "key_code": "r" },
+                "to": [{ "key_code": "l", "modifiers": ["left_option"] }],
+                "conditions": [
+                  { "type": "variable_if", "name": "nav_layer", "value": 1 }
+                ]
+              },
+              {
+                "type": "basic",
                 "from": { "key_code": "y" },
                 "to": [
                   { "key_code": "a", "modifiers": ["left_control"] },
