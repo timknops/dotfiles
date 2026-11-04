@@ -5,9 +5,9 @@ How I build software with AI. I'm a student heading into a junior role, so the g
 ## Principles
 
 1. **My workflow, not someone else's.** Borrow from existing skills (e.g. Matt Pocock's), but every stage should fit how I work, not drive me blind through someone else's process.
-2. **Confirm before outward-facing or bulk actions.** Anything on GitHub (creating issues, opening PRs, posting comments, pushing) or anything that creates many things at once is shown to me first. Local, reversible actions (branches, worktrees, edits inside `delegate`, running tests) just happen. Exception: `delegate` opens its draft PR and pushes its Iterations without asking, since that PR is where I review its work.
+2. **Confirm before outward-facing or bulk actions.** Anything on GitHub (creating issues, opening PRs, posting comments, pushing) or anything that creates many things at once is shown to me first. Local, reversible actions (branches, worktrees, edits inside `delegate`, running tests) just happen. Exception: `delegate` pushes its branch and its Iterations without asking, so the remote always matches its Preview. It opens a PR only when I ask, and that request is the confirmation.
 3. **Small PRs are the default, not a law.** A ticket that truly grows large has a reason; the PR description states it in one line. No size budgets on tickets.
-4. **Tests are part of done.** A ticket isn't finished until its behaviour is tested. Acceptance criteria map onto test cases.
+4. **Every criterion is verified, and risky behaviour is tested.** Business rules, validation, permissions, state changes, data integrity, API contracts and bug fixes need a test before a ticket is done. UI is checked in a browser. Copy, styling and pure wiring need neither. A test that would only restate the code isn't worth writing.
 
 ## Pipeline
 
@@ -102,8 +102,8 @@ I pick a ticket from GitHub, then decide the mode on the day. Mode is never stor
 - **One exception to silence:** a one-line warning for security problems or irreversible data loss (committing a secret, a destructive command). Never for bugs.
 - When I explicitly tell it to write something, it edits the files directly, scoped to exactly what I named, then hands control back.
 - **I commit**, not the skill (unless I tell it to). It never rewrites history. From level 1 up it comments in one line on weak commit messages.
-- The PR is opened only when I say I'm done. First it runs tests and linters and maps each acceptance criterion to a test, reporting failures and gaps without fixing them (I can override explicitly). Then it shows me the PR description.
-- Test-first is neither enforced nor encouraged for now (see Open experiments). Tests must exist by PR time.
+- The PR is opened only when I say I'm done. First it runs tests and linters and maps each risky acceptance criterion to a test (Principle 4), reporting failures and gaps without fixing them (I can override explicitly). Then it shows me the PR description.
+- Test-first is neither enforced nor encouraged for now (see Open experiments). Tests for risky behaviour must exist by PR time.
 - **Ticketless mode:** `/drive` with no ticket uses the current conversation as the brief, for work too small for a ticket. Same coaching; "done" just runs tests and linters, and a PR opens only if I ask.
 
 **`delegate`**: the agent writes the code.
@@ -112,13 +112,16 @@ I pick a ticket from GitHub, then decide the mode on the day. Mode is never stor
 - Sets up the worktree before writing code: installs dependencies, copies my gitignored `.env*` files from the main checkout, and gives the worktree its own dev and test databases (the dev one filled with a copy of my dev database's data). Then it runs the tests once: if `main` is already red, it stops and tells me.
 - Runs a **Preview** when the project has a dev server: the repo's whole stack, served from the worktree, so I can switch between sessions in the browser.
   - Each service runs on its usual port plus the ticket number mod 1000 (#43: web 3000 → 3043, API 8000 → 8043), or the next free port. My main checkout keeps the usual ports.
-  - Other stateful services (Redis, queues) stay shared.
+  - Other stateful services (Redis, queues) stay shared, and it never runs anything destructive on them.
   - It works out the setup from the code each run, follows a "Worktree setup" section in the project's `CLAUDE.md` if there is one, and asks only when it can't (e.g. a hardcoded port).
-- Writes tests first (tentative): one acceptance criterion at a time, failing test → code → commit.
-- The PR title uses the commit format (`feat: show orders grouped by customer`).
+  - Nothing it runs opens a browser window: browser tests run headless, and commands get `BROWSER=none PLAYWRIGHT_HTML_OPEN=never`. At Finish it opens the Preview once, as a background tab in my browser.
+- **Builds by risk** (Principle 4). Before coding it sorts the criteria: risky behaviour gets a failing test first, then code, then a commit. UI gets checked in a headless browser through Playwright MCP, never Claude in Chrome, which opens a new window per session. Copy and wiring get nothing. It only changes an existing test when the ticket changes that behaviour, or for a mechanical rename, and never loosens one to get green.
 - If the ticket is unclear, it stops and asks rather than guessing. That should never happen: an unclear ticket means `to-issues` fell short, so I fix the process upstream.
-- Runs the tests and linters, then opens its PR without asking (Principle 2), always as a draft: it's ready when I say so. The description adds a short "Decisions" list for choices the ticket didn't dictate, and lists anything still red.
-- **Iteration:** the session stays open after the PR. I try the Preview, give feedback in chat, and it builds it (test first for behaviour changes), commits, and pushes to the same PR. Anything beyond the ticket gets a line under Decisions. On request it also works through the PR's GitHub review comments.
+- **Finish:** a read-only subagent checks the diff against the ticket, and `delegate` fixes what it agrees with. Then it runs the full suite and linters, pushes the branch, and gives a terse report: what changed, Preview URL, test counts, plus any Decisions, Still red, Not checked or changed tests. No PR yet.
+- **Iteration:** the session stays open. I try the Preview, give feedback in chat, and it builds it (sorted by risk, as above), commits, and pushes. On request it also works through the PR's GitHub review comments.
+- **PR:** opened only when I ask, as a normal PR, with no preview of the description. The title uses the commit format (`feat: show orders grouped by customer`). The description lists Decisions (including anything built beyond the ticket), anything still red, and criteria that weren't checked.
+- **Resume:** an open PR means I'm reviewing it. Otherwise it compares the criteria with the commits to see what's left to build.
+- **Setup per machine:** UI checks need Playwright MCP, installed once with `claude mcp add -s user playwright -- npx @playwright/mcp@latest --headless` (it lives in `~/.claude.json`, outside these dotfiles). Without it, UI criteria are reported as "Not checked".
 - **Cleanup:** the worktree stays until the PR is merged. `delegate` records what it created in `~/.local/state/delegate/<repo>/<n>.json`. `delegate-prune` (in `agents/bin`, which I run by hand every so often; `--dry-run` shows what it would do) removes each merged, clean worktree with its Preview, databases and local branch. GitHub's "automatically delete head branches" setting removes the remote one.
   - State file fields: `repo`, `worktree`, `branch` (paths absolute), `ports` (the Preview's), `teardown` (shell commands that remove what it created, e.g. dropping the databases; each runs from the worktree with `bash -c`).
 - **Not doing:** coordinating Previews across separate frontend and backend repos. A feature spanning both is two tickets, and the frontend one stays blocked until the backend one merges, so its Preview can use my normal backend.
@@ -152,7 +155,6 @@ Build one at a time, testing each on real work before moving on.
 
 - **`grill-blind`:** does reasoning without seeing recommendations make me sharper, or just slower?
 - **Test-first in `drive`:** try TDD versus tests-after and see which helps me learn testing.
-- **Test-first in `delegate`:** the tentative default; keep or drop.
 - **Auto-push in Iteration:** keep, or switch to pushing only when I say so if the CI churn gets annoying.
 - **`delegate` on top of an untested `drive`:** `delegate` copies `drive`'s start and finish steps. Fixes found while testing `drive` probably apply to `delegate` too.
 - **Large-PR justification line:** drop it if it adds no value.
@@ -163,5 +165,4 @@ Build one at a time, testing each on real work before moving on.
 - **Learning log:** after each ticket, note what tripped me up, so `drive` adapts its help over time.
 - **PR split skill:** help break up a PR that has grown too large. Only if large PRs keep happening.
 - **Long-horizon planning:** a skill for work too big for one grilling session and one `to-issues` run, so planning can span several sessions. Similar in spirit to Matt Pocock's `wayfinder`, but it should fit this workflow better. Open questions: how planning carries across sessions; whether `to-issues` splits into separate "to spec" and "to issues" steps (risks copying Matt's pipeline too closely, see Principle 1).
-- **`delegate` checks its own Preview:** open it with the browser tools to verify UI work before reporting.
 - **Whole-spec delegation:** one run that builds every ticket in a spec with parallel subagents, like Matt Pocock's `implement-spec`. Only if one session per ticket gets tedious.

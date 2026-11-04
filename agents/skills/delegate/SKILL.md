@@ -1,12 +1,12 @@
 ---
 name: delegate
-description: Build a GitHub ticket with the agent writing the code. Takes a ticket number or URL, works in its own git worktree with its own databases and a Preview on its own ports so it can run in parallel with other sessions, builds test-first one acceptance criterion at a time, opens a draft PR without asking, then stays open for Iteration on the user's feedback.
+description: Build a GitHub ticket with the agent writing the code. Takes a ticket number or URL, works in its own git worktree with its own databases and a Preview on its own ports so it can run in parallel with other sessions, tests the risky behaviour test-first and checks the UI in a headless browser, pushes the branch, then stays open for Iteration and opens a PR only when the user asks.
 disable-model-invocation: true
 ---
 
 # Delegate
 
-This is the build step of the user's workflow (`explore → shape → to-issues → drive | delegate → review`). In `delegate`, **you write the code**. The user picked this ticket to hand off, often while they `drive` another one in the main checkout, or while several other `delegate` sessions run beside this one. Your job is to turn the ticket into a draft PR without needing them, give them a running Preview to try it in, and then build the changes they ask for until they're satisfied. Leave their checkout alone the whole time.
+This is the build step of the user's workflow (`explore → shape → to-issues → drive | delegate → review`). In `delegate`, **you write the code**. The user picked this ticket to hand off, often while they `drive` another one in the main checkout, or while several other `delegate` sessions run beside this one. Your job is to build the ticket on a pushed branch without needing them, give them a running Preview to try it in, build the changes they ask for until they're satisfied, and open the PR when they say so. Leave their checkout alone the whole time.
 
 Run it as `/delegate 43` or `/delegate https://github.com/owner/repo/issues/43`. It needs a ticket and builds exactly one per run.
 
@@ -22,7 +22,9 @@ Run it as `/delegate 43` or `/delegate https://github.com/owner/repo/issues/43`.
 
 **Set up the worktree.** Get the default branch from `gh repo view --json defaultBranchRef`, then run `git fetch origin`. Put the worktree next to the repo at `../<repo>.worktrees/<n>-<slug>`. `<repo>` is the name of the repo's top-level directory, and the slug is 2 to 5 words from the ticket title.
 
-- If a worktree or branch for this ticket already exists, this is a **resume**. Look for a branch named `<n>-*` locally and on `origin`, and check `git worktree list`. Reuse the worktree, or add one for the existing branch. If git refuses because the main checkout has the branch checked out, stop and say so. Read the state file (section 2) to find the databases and ports this ticket already has. Then run setup (section 2) without creating anything twice, and restart the Preview on the same ports. Carry on where the run left off. That means the remaining criteria, or Iteration (section 6) if the PR already exists (`gh pr list --head <branch> --state open`).
+- If a worktree or branch for this ticket already exists, this is a **resume**. Look for a branch named `<n>-*` locally and on `origin`, and check `git worktree list`. Reuse the worktree, or add one for the existing branch. If git refuses because the main checkout has the branch checked out, stop and say so. Read the state file (section 2) to find the databases and ports this ticket already has. Then run setup (section 2) without creating anything twice, and restart the Preview on the same ports. Then work out where the run left off:
+  - If the branch has an open PR (`gh pr list --head <branch> --state open`), the user is reviewing it. Go to Iteration (section 6).
+  - Otherwise, sort the criteria (section 3) and compare them with the branch's commits and tests. Build what's missing. If nothing is, go to Iteration.
 - Otherwise, run `git worktree add --no-track -b <n>-<slug> ../<repo>.worktrees/<n>-<slug> origin/<default>`.
 
 The main checkout's state doesn't matter, since you never touch it. The user may be working there right now. Do everything inside the worktree. `cd` into it and use absolute paths under it.
@@ -70,18 +72,38 @@ Stop and ask the user if:
 - a port is hardcoded with no env var or flag to change it, since making it configurable would mean changing code outside the ticket, or
 - you can't get the environment working, for example because of a missing env file or a service that won't start. Don't guess at config.
 
-Apart from gaps (section 4), these are the only reasons to interrupt the user. Decide everything else yourself, within what the ticket allows.
+Apart from these and the cases in sections 3 and 4, don't interrupt the user. Decide everything else yourself, within what the ticket allows.
+
+### Running commands
+
+- **Keep browsers out of sight.** The user is working in their own browser while you run, so nothing you launch should open a window. Run browser tests headless and never pass headed or debug flags (`--headed`, `--debug`, `--browse`, `cypress open`). Where a runner is headed locally by default, as Vitest browser mode is, pass its headless flag. Launch test and dev-server commands with `BROWSER=none PLAYWRIGHT_HTML_OPEN=never`, so dev servers and test reports don't open a browser on their own.
+- **Leave shared services alone.** Redis, queues and object storage are shared with the user's checkout and other sessions. Never run anything destructive on them (`FLUSHALL`, purging a queue, emptying a bucket), and never touch the user's own databases.
+- **Keep your context small.** Send long test or server output to a file and read the failures and the tail. Use an Explore subagent for wide searches through the codebase.
 
 ## 3. Build
 
-Work through the acceptance criteria one at a time:
+**Sort the criteria first.** Before writing code, decide how each acceptance criterion will be checked:
 
-1. Write a test for the criterion.
-2. Run it and check that it fails for the right reason. A test you never saw fail might not test anything.
+- **Test first:** behaviour where a bug would matter and could slip by unnoticed. That means business rules, validation, permissions, state changes, data integrity, API contracts and bug fixes. Test at the highest boundary that's still fast, usually an endpoint or integration test against the worktree's test database. One test can cover several criteria.
+- **Browser check:** UI rendering and flows. Add an end-to-end test only when a flow carries real logic.
+- **Nothing:** copy, styling, layout, wiring that a test above already exercises, and framework or config behaviour.
+
+If the only test you could write would restate the code (asserting a constant string, asserting that a mock was called, snapshotting markup), don't write it. Tests like that cost time and catch nothing.
+
+**Test-first behaviour**, one at a time:
+
+1. Write the test. Take the expected values from the ticket or a worked example, never by computing them the way the code will, or the test agrees with whatever the code does.
+2. Run it and check that it fails for the right reason. A test you never saw fail might not test anything. One that passes straight away usually means the test is wrong.
 3. Write the least code that makes it pass. While you work, run the typechecker and the test file you're in, not the whole suite.
 4. Commit.
 
 Test behaviour through public interfaces (the exported function, the endpoint, the UI), not internals, so the tests still pass after later refactors. Don't write all the tests first and then all the code. Use what you learned in each cycle when you write the next test.
+
+**Browser checks.** Once the UI for a criterion is built, open the Preview with the Playwright MCP tools, which run headless. Walk through the criterion, and check the console for errors. Don't use Claude in Chrome: it opens a new window in the user's Chrome for every session. If the Playwright tools aren't available, list those criteria under "Not checked" in the report.
+
+**Changing tests.** Change an existing test only when the ticket changes the behaviour it checks, or for a mechanical update that keeps the same assertion, such as a renamed function or a moved route. Never loosen, skip or delete an assertion to get to green. That hides the bug from the reviewer instead of fixing it. If a test looks wrong for any other reason, stop and ask. Note every existing test you changed in the report.
+
+**When something won't pass.** Rerun a failure once on its own. If it also fails on the baseline, or it's flaky, it isn't yours: note it under "Still red" and leave it. Never add sleeps or retries to make a test pass. Wait on a condition instead. After three failed attempts at the same failure, stop patching. Get a failure you can reproduce reliably, form one hypothesis, and test it. If you're still stuck, record it under "Still red" with what you tried, or ask the user if it blocks a criterion.
 
 Stay inside the ticket. Don't fix neighbouring code, tidy up, or add behaviour the ticket doesn't ask for. Those changes make the PR harder to review, and cleanup belongs in review.
 
@@ -96,13 +118,54 @@ If the ticket is unclear, or you hit a decision it doesn't make (for example wha
 
 ## 5. Finish
 
-1. **Run the full test suite and linters.** Fix what you broke.
-2. **Check the criteria.** Every acceptance criterion should have a test.
-3. **Push and open a draft PR without asking.** The user reviews your work in the PR and the Preview, so there's nothing to approve first. Run `git push -u origin <branch>`, then `gh pr create --draft --base <default> --title "<title>" --body-file <file>`. The PR is always a draft, because Iteration usually follows and the PR is ready only when the user says so.
-4. **Title.** Use the commit format with the ticket's title as the description. "Show orders grouped by customer" becomes `feat: show orders grouped by customer`. Leave the ticket number out. `Closes #<n>` already links them, and a squash merge adds the PR number.
-5. **Report** in one line with the PR link and the Preview URL(s), then say you're ready for feedback.
+1. **Self-check.** Spawn a read-only subagent and give it the ticket, the parent spec and `git diff origin/<default>...HEAD`. Ask it only whether the diff does what the ticket says: missing or partial criteria, criteria that look done but are wrong, scope creep, and failures that would go unnoticed. Leave style and quality out, because those belong to the review step. Fix the findings you agree with that are inside the ticket, the same way as in Build. A finding that's really a decision the ticket doesn't make is a gap (section 4). Keep a one-line reason for each finding you leave.
+2. **Run the full test suite and linters** after your last edit, and fix what you broke. Read the output. A report built on an earlier run, or on "should pass", isn't worth anything.
+3. **Push** with `git push -u origin <branch>`. Don't open a PR. The user iterates first and asks for the PR when they're happy (section 7).
+4. **Open the Preview** for the user once, as a background tab in their browser: `open -g <url>` on macOS, `xdg-open <url>` on Linux. Don't open it again on Iterations or resumes.
+5. **Report.** The user reads these between other sessions, so keep it fast to scan:
+
+   ```markdown
+   <1 to 3 lines on what changed, in glossary terms.>
+   Preview: <url(s)>
+   Tests: <n> passed, lint clean
+
+   Decisions:
+   - <A choice the ticket didn't dictate, and why.>
+   Still red:
+   - <A failing test or lint, with what you tried.>
+   Not checked:
+   - <criterion> (<why>)
+   Tests changed:
+   - <existing test>: <why>
+   Self-check, left:
+   - <finding>: <why you left it>
+   ```
+
+   Leave out every section with nothing in it. Usually only the first three lines remain. Don't add explanations around it.
 
 Don't remove the worktree, branch, databases or Preview. They stay until the PR merges, so the user can keep iterating. After that, `delegate-prune` cleans them up.
+
+## 6. Iteration
+
+The session doesn't end at Finish. The user tries the Preview, looks at the branch or the PR, and gives feedback in this chat, often while running several sessions side by side. Each round of feedback is an Iteration.
+
+- **Build it the same way.** Sort the change as in Build: risky behaviour gets a test first, and UI gets a browser check. Comments and commits follow the same rules.
+- **Check, then push without asking.** Before each push, run the typechecker, the linters and the tests the change affects. Then commit and push. The branch should always match what the user sees in the Preview.
+- **Beyond the ticket.** If the user asks for something the ticket doesn't cover, build it, since they asked, and keep it as a Decision for the PR.
+- **Review comments.** When the PR exists and the user asks you to address its comments, read them with `gh pr view <n> --comments` and `gh api repos/{owner}/{repo}/pulls/<n>/comments`, and treat each as feedback. Don't reply on GitHub unless the user asks.
+- **Unclear feedback.** Ask, since the user is right there. A request that changes other tickets or needs a new term is a large gap (section 4).
+- **Once the PR exists,** keep its description true: update "Decisions", "Still red" and "Not checked" as things change with `gh pr edit <n> --body-file <file>`.
+
+Keep the Preview running between Iterations. End each one with a line saying what changed, the test counts, and that it's pushed.
+
+## 7. Opening the PR
+
+Open the PR only when the user asks ("open the PR", or similar). That request is the confirmation, so don't show the description first.
+
+1. **Run the full test suite and linters.** If anything is red, say what, and ask whether to open it anyway.
+2. **Open it** with `gh pr create --base <default> --title "<title>" --body-file <file>`. It's a normal PR, not a draft.
+3. **Title.** Use the commit format with the ticket's title as the description. "Show orders grouped by customer" becomes `feat: show orders grouped by customer`. Leave the ticket number out. `Closes #<n>` already links them, and a squash merge adds the PR number.
+4. **Report** the PR link in one line.
 
 ### PR description
 
@@ -111,22 +174,24 @@ Keep it short. If the repo has a PR template (`.github/pull_request_template.md`
 ```markdown
 <1 to 3 lines on what changed, in glossary terms.>
 
-- [x] Every acceptance criterion has a test
+## Decisions
+
+- <A choice the ticket didn't dictate, including anything built beyond the ticket in Iteration, and why.>
 
 ## Still red
 
-- <A failing test or lint, or a criterion with no test after a real effort.>
+- <A failing test or lint.>
 
-## Decisions
+## Not checked
 
-- <A choice you made that the ticket didn't dictate, and why.>
+- <A criterion with no test and no browser check, and why.>
 
 <One line on why it's large, only if the PR is much larger than usual for one ticket.>
 
 Closes #<n>
 ```
 
-Tick the test checkbox only when every criterion has a test. Otherwise leave it unticked and name the uncovered criteria on the line below it. Leave out `## Still red` when everything is green, and `## Decisions` when you made no choices beyond what the ticket said. When you include Decisions, the reviewer needs to check those choices more than anything else in the PR.
+Leave out every section with nothing in it. When you include Decisions, the reviewer needs to check those choices more than anything else in the PR.
 
 ### "To design" notice
 
@@ -136,16 +201,3 @@ After opening the PR, look at the parent spec's sub-issues. If this ticket is th
 >
 > - <item>
 > - <item>
-
-## 6. Iteration
-
-The session doesn't end with the PR. The user tries the Preview, looks at the PR, and gives feedback in this chat, often while running several sessions side by side. Each round of feedback is an Iteration. Build it, then push it to the same PR.
-
-- **Build it the same way.** A change in behaviour gets a test first, as in Build. A visual or copy tweak doesn't need a new test. Comments and commits follow the same rules.
-- **Check, then push without asking.** Before each push, run the typechecker, the linters and the tests the change affects. Then commit and push. The PR should always match what the user sees in the Preview.
-- **Keep the description true.** If the user asks for something beyond the ticket, build it, since they asked, and add a line under `## Decisions`. Update the checkbox and `## Still red` as things change. Use `gh pr edit <n> --body-file <file>`.
-- **Stay a draft.** Run `gh pr ready` only when the user tells you to. They may also mark it ready on GitHub themselves.
-- **Review comments.** When the user asks you to address the PR's comments, read them with `gh pr view <n> --comments` and `gh api repos/{owner}/{repo}/pulls/<n>/comments`, and treat each as feedback. Don't reply on GitHub unless the user asks.
-- **Unclear feedback.** Ask, since the user is right there. A request that changes other tickets or needs a new term is a large gap (section 4).
-
-Keep the Preview running between Iterations. End each one with a line saying what changed and that it's pushed.

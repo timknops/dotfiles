@@ -33,5 +33,5 @@ The running app a `delegate` session serves from its worktree on its own port, s
 _Avoid_: Dev server, server, staging
 
 **Iteration**:
-A round of feedback the user gives a `delegate` session after its PR is open, which the session builds and pushes to the same PR.
+A round of feedback the user gives a `delegate` session after it reports its build done, which the session builds and pushes to the same branch.
 _Avoid_: Revision, follow-up, review round

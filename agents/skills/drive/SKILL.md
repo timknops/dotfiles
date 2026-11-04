@@ -84,8 +84,8 @@ In ticketless mode there's no ticket to comment on. Just help them decide.
 
 The PR opens only when the user says they're done. Then:
 
-1. **Run the tests and linters.** Find the commands in the project (`CLAUDE.md`, `package.json` scripts, a `Makefile`, `pyproject.toml`, CI config). Ask the user only if you can't find them.
-2. **Map acceptance criteria to tests** (ticket mode). For each criterion on the ticket, name the test that covers it. List any criterion with no test. Tests are part of done in this workflow. A ticket isn't finished until its behaviour is tested.
+1. **Run the tests and linters.** Find the commands in the project (`CLAUDE.md`, `package.json` scripts, a `Makefile`, `pyproject.toml`, CI config). Ask the user only if you can't find them. Run browser tests headless, never with headed or debug flags, and launch commands with `BROWSER=none PLAYWRIGHT_HTML_OPEN=never`, so nothing opens a window over the user's work.
+2. **Map risky criteria to tests** (ticket mode). A criterion is risky when a bug in it would matter and could slip by unnoticed: business rules, validation, permissions, state changes, data integrity, API contracts and bug fixes. For each risky criterion, name the test that covers it, and list any with no test. Copy, styling, layout, UI rendering and pure wiring don't need a test. In this workflow, a ticket isn't finished until its risky behaviour is tested.
 3. **Report, don't fix.** List failing tests, lint errors, criteria without a test, and uncommitted changes (they won't be in the PR). Say what is wrong and where, as with a check. Fixing is the user's job, and your help follows their level. Repeat from step 1 when they say they're done again. The user can override with an explicit "open it anyway". Never decide on their behalf that a gap is fine.
 4. **Show the PR.** When it's clean (or overridden), show the title and full description exactly as you'll publish them. On approval, run `git push -u origin <branch>`, then `gh pr create --base <default> --title "<title>" --body-file <file>`.
 
@@ -98,14 +98,16 @@ If the repo has a PR template (`.github/pull_request_template.md`, `.github/PULL
 ```markdown
 <1 to 3 lines on what changed, in glossary terms.>
 
-- [x] Every acceptance criterion is covered by a test
+## Not checked
+
+- <A risky criterion with no test.>
 
 <One line on why it's large, only if the PR is notably large for one ticket. Ask the user for the reason. Don't invent one.>
 
 Closes #<n>
 ```
 
-Tick the test checkbox (in the template or the fallback) only when every criterion has a test. If the PR was opened anyway with gaps, leave it unticked and name the uncovered criteria on the line below it.
+Include `## Not checked` only when the PR was opened anyway with risky criteria untested. If the repo's template has a test checkbox, tick it only when every risky criterion has a test.
 
 ### "To design" notice
 
