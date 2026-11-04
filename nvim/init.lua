@@ -79,10 +79,13 @@ vim.pack.add({
     "https://github.com/ibhagwan/fzf-lua",
     "https://github.com/stevearc/oil.nvim",
     "https://github.com/lewis6991/gitsigns.nvim",
+    "https://github.com/rebelot/kanagawa.nvim",
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") }
 })
 
 vim.cmd("packadd! termdebug")
+
+vim.cmd.colorscheme("kanagawa-wave")
 
 require("blink.cmp").setup()
 require("oil").setup({
