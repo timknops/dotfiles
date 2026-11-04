@@ -134,7 +134,7 @@ One review skill for every PR, whoever wrote it (me, `delegate`, anyone else).
 
 My own skills live in `~/dotfiles/agents/skills` and are symlinked into `~/.claude/skills`. Third-party skills (installed via the skills CLI) live in `~/.agents/skills`.
 
-Rules for every session, whatever the skill, live in `~/dotfiles/agents/claude/CLAUDE.md`, symlinked to `~/.claude/CLAUDE.md`: no code comments by default, Conventional Commits, and asking before touching memory. Attribution in commits and PRs is off through `"attribution": false` in `~/.claude/settings.json`, because the work is mine, even when an agent wrote it.
+Rules for every session, whatever the skill, live in `~/dotfiles/agents/claude/CLAUDE.md`, symlinked to `~/.claude/CLAUDE.md`: no code comments by default, Conventional Commits, and asking before touching memory. Settings live in `~/dotfiles/agents/claude/settings.json`, symlinked to `~/.claude/settings.json`. They switch off attribution in commits and PRs, because the work is mine, even when an agent wrote it, and hold the hooks that drive the Claude marks in the tmux status bar.
 
 | Skill | Status |
 |---|---|

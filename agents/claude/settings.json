@@ -1,0 +1,56 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "permissions": {
+    "ask": [
+      "Edit(~/.claude/projects/**/memory/**)"
+    ]
+  },
+  "model": "opus",
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir // .cwd // empty'); if [ \"$cwd\" = \"$HOME\" ]; then dir='~'; else dir=\"${cwd#\"$HOME\"/}\"; fi; model=$(echo \"$input\" | jq -r '.model.display_name // \"unknown model\"'); effort=$(echo \"$input\" | jq -r '.effort.level // empty'); [ -n \"$effort\" ] && model=\"$model $effort\"; ctx=$(echo \"$input\" | jq -r 'def fmt: (. / 100000 | floor) as $t | if . >= 1000000 then (if $t % 10 == 0 then \"\\($t / 10 | floor)M\" else \"\\($t / 10 | floor).\\($t % 10)M\" end) else \"\\(. / 1000 | floor)k\" end; (.context_window // {}) as $c | if $c.used_percentage == null then \"ctx: n/a\" else \"ctx: \\($c.used_percentage | floor)%\" + (if ($c.total_input_tokens != null and $c.context_window_size != null) then \" (\\($c.total_input_tokens | fmt)/\\($c.context_window_size | fmt))\" else \"\" end) end'); printf '\\033[01;34m%s\\033[00m | %s | %s' \"$dir\" \"$model\" \"$ctx\""
+  },
+  "enabledPlugins": {},
+  "modelSettings": {
+    "claude-opus-5": {
+      "effortLevel": "medium"
+    },
+    "claude-haiku-4-5": {
+      "effortLevel": "high"
+    },
+    "claude-sonnet-5": {
+      "effortLevel": "medium"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
+    }
+  },
+  "theme": "dark",
+  "hooks": {
+    "SessionStart": [
+      { "matcher": "startup|resume|clear", "hooks": [{ "type": "command", "command": "~/dotfiles/agents/bin/claude-tmux-state idle" }] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "~/dotfiles/agents/bin/claude-tmux-state working" }] }
+    ],
+    "PreToolUse": [
+      { "hooks": [{ "type": "command", "command": "~/dotfiles/agents/bin/claude-tmux-state working" }] }
+    ],
+    "PostToolUse": [
+      { "hooks": [{ "type": "command", "command": "~/dotfiles/agents/bin/claude-tmux-state working" }] }
+    ],
+    "Notification": [
+      { "matcher": "permission_prompt|elicitation_dialog", "hooks": [{ "type": "command", "command": "~/dotfiles/agents/bin/claude-tmux-state blocked" }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "~/dotfiles/agents/bin/claude-tmux-state done" }] }
+    ],
+    "SessionEnd": [
+      { "hooks": [{ "type": "command", "command": "~/dotfiles/agents/bin/claude-tmux-state clear" }] }
+    ]
+  }
+}
