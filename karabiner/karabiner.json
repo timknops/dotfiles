@@ -768,7 +768,8 @@
                       "co.zeit.hyper",
                       "dev.warp.Warp-Stable",
                       "net.kovidgoyal.kitty",
-                      "com.github.wez.wezterm"
+                      "com.github.wez.wezterm",
+                      "com.mitchellh.ghostty"
                     ]
                   }
                 ]
@@ -804,7 +805,8 @@
                       "co.zeit.hyper",
                       "dev.warp.Warp-Stable",
                       "net.kovidgoyal.kitty",
-                      "com.github.wez.wezterm"
+                      "com.github.wez.wezterm",
+                      "com.mitchellh.ghostty"
                     ]
                   }
                 ]
@@ -840,7 +842,8 @@
                       "co.zeit.hyper",
                       "dev.warp.Warp-Stable",
                       "net.kovidgoyal.kitty",
-                      "com.github.wez.wezterm"
+                      "com.github.wez.wezterm",
+                      "com.mitchellh.ghostty"
                     ]
                   }
                 ]
@@ -878,7 +881,8 @@
                       "co.zeit.hyper",
                       "dev.warp.Warp-Stable",
                       "net.kovidgoyal.kitty",
-                      "com.github.wez.wezterm"
+                      "com.github.wez.wezterm",
+                      "com.mitchellh.ghostty"
                     ]
                   }
                 ]
@@ -914,7 +918,8 @@
                       "co.zeit.hyper",
                       "dev.warp.Warp-Stable",
                       "net.kovidgoyal.kitty",
-                      "com.github.wez.wezterm"
+                      "com.github.wez.wezterm",
+                      "com.mitchellh.ghostty"
                     ]
                   }
                 ]
@@ -950,7 +955,8 @@
                       "co.zeit.hyper",
                       "dev.warp.Warp-Stable",
                       "net.kovidgoyal.kitty",
-                      "com.github.wez.wezterm"
+                      "com.github.wez.wezterm",
+                      "com.mitchellh.ghostty"
                     ]
                   }
                 ]
