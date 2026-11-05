@@ -5,6 +5,15 @@
     "sessionUrl": false
   },
   "permissions": {
+    "allow": [
+      "Bash(gh label create:*)",
+      "Bash(gh issue create:*)",
+      "Bash(gh issue edit:*)",
+      "Bash(gh issue close:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh issue comment)"
+    ],
     "ask": [
       "Edit(~/.claude/projects/**/memory/**)"
     ]
@@ -101,7 +110,11 @@
     },
     "claude-opus-5-5": {
       "effortLevel": "high"
+    },
+    "claude-fable-5-1": {
+      "effortLevel": "medium"
     }
   },
+  "skipWorkflowUsageWarning": true,
   "theme": "dark"
 }

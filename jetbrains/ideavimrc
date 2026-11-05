@@ -101,3 +101,6 @@ imap <C-g> <Action>(Generate)
 " Refactoring
 vmap <C-r> <Action>(Refactorings.QuickListPopupAction)
 
+" Run the selected run configuration
+nmap <C-r> <Action>(Run)
+
