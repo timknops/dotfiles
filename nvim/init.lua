@@ -19,6 +19,9 @@ vim.keymap.set("x", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.breakindent = true
+vim.opt.splitbelow = true
+vim.opt.inccommand = "split"
 
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
@@ -42,6 +45,8 @@ vim.schedule(function()
     vim.opt.clipboard = "unnamedplus"
 end)
 
+vim.diagnostic.config({ virtual_text = true })
+
 vim.api.nvim_create_autocmd("TextYankPost", {
     group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
     callback = function()
@@ -49,10 +54,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 
-vim.diagnostic.config({ virtual_text = true })
-
 local format_group = vim.api.nvim_create_augroup("lsp-format", { clear = true })
-
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
     callback = function(args)
@@ -79,6 +81,15 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
+    group = vim.api.nvim_create_augroup("autosave", { clear = true }),
+    callback = function(args)
+        if vim.bo[args.buf].buftype == "" then
+            vim.cmd("silent! update")
+        end
+    end
+})
+
 vim.g.tmux_navigator_no_mappings = 1
 
 vim.pack.add({
@@ -96,7 +107,6 @@ vim.pack.add({
 })
 
 vim.cmd("packadd! termdebug")
-
 vim.cmd.colorscheme("kanagawa-wave")
 
 require("blink.cmp").setup()
