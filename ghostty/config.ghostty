@@ -15,3 +15,5 @@ window-padding-color = background
 gtk-titlebar-hide-when-maximized = true
 
 macos-option-as-alt = left
+
+keybind = ctrl+backspace=text:\x17
