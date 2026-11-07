@@ -49,8 +49,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 
-vim.lsp.enable("clangd")
-
 vim.diagnostic.config({ virtual_text = true })
 
 local format_group = vim.api.nvim_create_augroup("lsp-format", { clear = true })
@@ -109,5 +107,5 @@ require("oil").setup({
 })
 require("mini.pairs").setup()
 require("mason").setup()
-require("mason-lspconfig").setup({ ensure_installed = { "lua_ls" } })
+require("mason-lspconfig").setup({ ensure_installed = { "lua_ls", "clangd" } })
 require("lazydev").setup()
